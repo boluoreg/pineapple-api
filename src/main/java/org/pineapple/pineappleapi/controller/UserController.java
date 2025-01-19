@@ -34,6 +34,7 @@ public class UserController {
 
     @PostMapping("resetPassword")
     public ResponseEntity<RestBean<AccountVO>> resetPassword(@AuthenticationPrincipal User user, @RequestBody ResetPasswordDTO dto) {
+        // todo move to service
         if (dto.getOldPassword().equals(dto.getPassword())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(RestBean.badRequest("You cannot set the same password"));
         }

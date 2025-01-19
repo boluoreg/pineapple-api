@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: pineapple-api
+  security:
+    jwt:
+      key: qwertyuioasdfghjkl
+      expire: 1
