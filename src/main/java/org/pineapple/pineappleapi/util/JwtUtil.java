@@ -6,7 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -22,15 +22,13 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Component
+@RequiredArgsConstructor
 public class JwtUtil {
+    private final StringRedisTemplate template;
     @Value("${spring.security.jwt.key}")
     String key;
-
     @Value("${spring.security.jwt.expire}")
     int expire;
-
-    @Resource
-    StringRedisTemplate template;
 
     public boolean invalidateJwt(String headerToken) {
         String token = convertToken(headerToken);

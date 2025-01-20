@@ -13,6 +13,7 @@ import org.pineapple.pineappleapi.service.AuthorizeMapper;
 import org.pineapple.pineappleapi.util.JwtUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -30,7 +31,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 @Configuration
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__(@Lazy))
 public class SecurityConfig {
 
     private final JwtUtil jwtUtil;
@@ -48,7 +49,9 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(conf -> conf
                         .requestMatchers("/api/pineapple/**", "/api/pineapple", "/api/user/register").permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers("/api/production-line/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
+                )
                 .formLogin(
                         conf -> conf
                                 .loginProcessingUrl("/api/user/login")

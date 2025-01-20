@@ -1,5 +1,6 @@
 package org.pineapple.pineappleapi.service.impl;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -9,6 +10,7 @@ import org.pineapple.pineappleapi.entity.vo.AccountVO;
 import org.pineapple.pineappleapi.repository.AccountRepository;
 import org.pineapple.pineappleapi.service.AccountMapper;
 import org.pineapple.pineappleapi.service.AccountService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,6 +29,20 @@ public class AccountServiceImpl implements AccountService {
     private final AccountMapper accountMapper;
 
     private final PasswordEncoder passwordEncoder;
+
+    @Value("${pineapple.account.username}")
+    private String username;
+
+    @Value("${pineapple.account.password}")
+    private String password;
+
+    @PostConstruct
+    private void init() {
+        if (accountRepository.count() == 0) {
+            log.info("Registering the default admin account...");
+            register(username, password, true);
+        }
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -48,8 +64,10 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountVO register(@NotNull RegisterDTO dto) {
-        String username = dto.getUsername();
-        String password = dto.getPassword();
+        return this.register(dto.getUsername(), dto.getPassword(), false);
+    }
+
+    private @NotNull AccountVO register(String username, String password, boolean admin) {
         // find exists
         Optional<Account> existAccount = accountRepository.findByUsername(username);
         if (existAccount.isPresent()) {
@@ -63,12 +81,11 @@ public class AccountServiceImpl implements AccountService {
         account.setUsername(username);
         account.setPassword(passwordEncoder.encode(password));
 
-        account.setRoles(List.of("USER"));
-//        if (admin) {
-//            account.setRoles(List.of("USER", "ADMIN"));
-//        } else {
-//            account.setRoles(List.of("USER"));
-//        }
+        if (admin) {
+            account.setRoles(List.of("USER", "ADMIN"));
+        } else {
+            account.setRoles(List.of("USER"));
+        }
         log.info("Account {} was registered", account.getUsername());
         return accountMapper
                 .toAccountVO(accountRepository.save(account));

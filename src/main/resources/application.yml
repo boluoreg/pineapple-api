@@ -7,6 +7,9 @@ spring:
       expire: 1
   kafka:
     bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
       group-id: pineapple-group
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -14,3 +17,9 @@ spring:
   data:
     mongodb:
       uri: mongodb://root:password@localhost:27017/pineapple?authSource=admin
+
+pineapple:
+  account:
+    # please modify the password to keep your server safe
+    username: pineapple
+    password: password
