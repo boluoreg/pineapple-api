@@ -47,7 +47,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthorizeFilter jwtAuthorizeFilter) throws Exception {
         return http
                 .authorizeHttpRequests(conf -> conf
-                        .requestMatchers("/api/pineapple/get", "/api/user/register").permitAll()
+                        .requestMatchers("/api/pineapple/**", "/api/pineapple", "/api/user/register").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(
                         conf -> conf

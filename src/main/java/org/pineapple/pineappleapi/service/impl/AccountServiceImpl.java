@@ -9,6 +9,7 @@ import org.pineapple.pineappleapi.entity.vo.AccountVO;
 import org.pineapple.pineappleapi.repository.AccountRepository;
 import org.pineapple.pineappleapi.service.AccountMapper;
 import org.pineapple.pineappleapi.service.AccountService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,7 +21,7 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__(@Lazy))
 public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final AccountMapper accountMapper;

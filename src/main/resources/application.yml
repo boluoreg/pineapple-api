@@ -5,3 +5,12 @@ spring:
     jwt:
       key: qwertyuioasdfghjkl
       expire: 1
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: pineapple-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.BytesDeserializer
+  data:
+    mongodb:
+      uri: mongodb://root:password@localhost:27017/pineapple?authSource=admin
