@@ -58,7 +58,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthorizeFilter jwtAuthorizeFilter) throws Exception {
         return http
                 .authorizeHttpRequests(conf -> conf
-                        .requestMatchers("/api/pineapple/**", "/api/pineapple", "/api/user/register").permitAll()
+                        .requestMatchers("/api/pineapple/**", "/api/pineapple", "/api/user/register", "/api/captcha").permitAll()
                         .requestMatchers("/api/production-line/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
