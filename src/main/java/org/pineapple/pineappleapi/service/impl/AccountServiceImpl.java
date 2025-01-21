@@ -109,7 +109,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     private boolean isValidUsername(String username) {
-        if (username == null || username.length() <= 5) {
+        if (username == null || username.length() < 5) {
             return false;
         }
         return username.matches("^[a-zA-Z0-9_-]+$");
