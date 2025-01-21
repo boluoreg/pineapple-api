@@ -11,6 +11,7 @@ import org.pineapple.pineappleapi.filter.JwtAuthorizeFilter;
 import org.pineapple.pineappleapi.service.AccountService;
 import org.pineapple.pineappleapi.service.AuthorizeMapper;
 import org.pineapple.pineappleapi.util.JwtUtil;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -48,6 +49,9 @@ public class SecurityConfig {
 
     private final AccountService accountService;
     private final AuthorizeMapper authorizeMapper;
+
+    @Value("${pineapple.frontend.address}")
+    private String frontendAddress;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -89,7 +93,7 @@ public class SecurityConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(@NotNull CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("http://localhost:5173", "https://pineapple.lunarclient.top");
+                registry.addMapping("/**").allowedOrigins("http://localhost:5173", frontendAddress);
             }
         };
     }

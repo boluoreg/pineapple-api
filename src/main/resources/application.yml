@@ -19,6 +19,9 @@ spring:
       uri: mongodb://root:password@localhost:27017/pineapple?authSource=admin
 
 pineapple:
+  frontend:
+    # 真正部署的地址, localhost上的vite是永远被允许的
+    address: https://pineapple.lunarclient.top
   account:
     # please modify the password to keep your server safe
     username: pineapple
