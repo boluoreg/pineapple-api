@@ -28,7 +28,7 @@ public class PineappleController {
     @GetMapping("get")
     public ResponseEntity<RestBean<PineappleVO>> getPineapple(@RequestParam(required = false) String ticket) {
         if (!captchaService.isSolved(ticket)) {
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(RestBean.failure(503, "请完成菠萝🍍人验证,来防止赛博菠萝人"));
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(RestBean.failure(403, "请完成菠萝🍍人验证,来防止赛博菠萝人"));
         }
         PineappleVO data = pineappleService.fetch();
         if (data == null) {
