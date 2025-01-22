@@ -1,4 +1,16 @@
 services:
+  pineapple:
+    image: nkwjg/pineapple-api:latest
+    container_name: pineapple-api
+    ports:
+      - "8888:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      MONGODB_URL: mongodb://root:password@mongodb:27017/pineapple?authSource=admin
+      KAFKA_BOOTSTRAP_SERVER: pa-kafka:9092
+      JWT_KEY: afousvoiaovdoias
+      FRONTEND_ADDRESS: https://www.manthe.top
+
   mongodb:
     image: mongo:latest
     container_name: mongodb
@@ -43,16 +55,3 @@ services:
       - ALLOW_PLAINTEXT_LISTENER=yes
     ports:
       - "9092:9092"
-
-  kafka-ui:
-    image: provectuslabs/kafka-ui:latest
-    container_name: pa-kafka-ui
-    restart: always
-    depends_on:
-      - kafka
-    environment:
-      KAFKA_CLUSTERS_NAME: local
-      KAFKA_CLUSTERS_BOOTSTRAP_SERVERS: pa-kafka:29092
-      DYNAMIC_CONFIG_ENABLED: 'true'
-    ports:
-      - "8081:8080"
