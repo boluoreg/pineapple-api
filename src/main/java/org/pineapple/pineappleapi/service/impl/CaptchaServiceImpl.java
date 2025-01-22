@@ -46,6 +46,7 @@ public class CaptchaServiceImpl implements CaptchaService {
 
     @Override
     public boolean isSolved(String ticket) {
+        if (ticket == null) return false;
         Captcha captcha = captchaRepository.findById(ticket).orElse(null);
         if (captcha == null) return false;
         return captcha.isSolved();
