@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose --file docker-compose.yml convert
+    kompose.version: 1.34.0 (HEAD)
+  labels:
+    io.kompose.service: pineapple
+  name: pineapple
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      io.kompose.service: pineapple
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose --file docker-compose.yml convert
+        kompose.version: 1.34.0 (HEAD)
+      labels:
+        io.kompose.service: pineapple
+    spec:
+      containers:
+        - env:
+            - name: FRONTEND_ADDRESS
+              value: https://www.manthe.top
+            - name: JWT_KEY
+              value: afousvoiaovdoias
+            - name: KAFKA_BOOTSTRAP_SERVER
+              value: kafka.default.svc.cluster.local:9092
+            - name: MONGODB_URL
+              value: mongodb://root:password@mongodb.default.svc.cluster.local:27017/pineapple?authSource=admin
+            - name: REDIS_URL
+              value: redis://redis.default.svc.cluster.local:6379
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod
+          image: nkwjg/pineapple-api:latest
+          name: pineapple-api
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+      restartPolicy: Always
