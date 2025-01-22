@@ -7,15 +7,14 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: prod
       MONGODB_URL: mongodb://root:password@mongodb:27017/pineapple?authSource=admin
-      KAFKA_BOOTSTRAP_SERVER: pa-kafka:9092
+      KAFKA_BOOTSTRAP_SERVER: kafka:9092
       JWT_KEY: afousvoiaovdoias
       FRONTEND_ADDRESS: https://www.manthe.top
+      REDIS_URL: redis://redis:6379
 
   mongodb:
     image: mongo:latest
     container_name: mongodb
-    ports:
-      - "27017:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: password
@@ -25,11 +24,12 @@ services:
 
   redis:
     image: redis:latest
-    container_name: pa_redis
+    container_name: redis
     restart: always
-    ports:
-      - "6379:6379"
     command: [ "redis-server", "--appendonly", "yes" ]
+    depends_on:
+      - mongodb
+      - kafka
 
   zookeeper:
     image: bitnami/zookeeper:latest
@@ -37,12 +37,10 @@ services:
     restart: always
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
-    ports:
-      - "2181:2181"
 
   kafka:
     image: bitnami/kafka:latest
-    container_name: pa-kafka
+    container_name: kafka
     restart: always
     depends_on:
       - zookeeper
@@ -50,8 +48,6 @@ services:
       - KAFKA_BROKER_ID=1
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
       - KAFKA_LISTENERS=PLAINTEXT://:9092
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
       - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
       - ALLOW_PLAINTEXT_LISTENER=yes
-    ports:
-      - "9092:9092"

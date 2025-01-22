@@ -19,6 +19,8 @@ spring:
   data:
     mongodb:
       uri: ${MONGODB_URL:mongodb://root:password@localhost:27017/pineapple?authSource=admin}
+    redis:
+      url: ${REDIS_URL:redis://localhost:6379}
 
 pineapple:
   frontend:
