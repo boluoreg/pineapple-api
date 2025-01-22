@@ -1,15 +1,14 @@
-# 这个是dev环境的配置文件,生产环境请看另外一个配置文件
-# 修改这个文件的值不会应用到生产环境.
+
 
 spring:
   application:
     name: pineapple-api
   security:
     jwt:
-      key: qwertyuioasdfghjkl
+      key: ${JWT_KEY}
       expire: 1
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER}
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
@@ -19,12 +18,15 @@ spring:
       value-deserializer: org.apache.kafka.common.serialization.BytesDeserializer
   data:
     mongodb:
-      uri: mongodb://root:password@localhost:27017/pineapple?authSource=admin
+      uri: ${MONGODB_URL}
 
 pineapple:
   frontend:
-    address: https://pineapple.lunarclient.top
+    # 真正部署的地址, localhost上的vite是永远被允许的
+    address: ${FRONTEND_ADDRESS}
   account:
     # please modify the password to keep your server safe
     username: pineapple
     password: password
+server:
+  port: 8080
